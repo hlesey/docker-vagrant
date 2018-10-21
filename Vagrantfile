@@ -1,0 +1,60 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+#BOX_IMAGE="centos/7"
+BOX_IMAGE="adriananeci/centos7"
+BOX_VERSION="1.0"
+NAME="dockerhost"
+
+required_plugins = %w(vagrant-vbguest vagrant-share)
+
+required_plugins.each do |plugin|
+  system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on"]
+    vb.name = NAME
+    ### Add a second disk for docker thinpool lvm
+    # # Get disk path
+    # line = `"C:\\Program Files\\Oracle\\Virtualbox\\VBoxManage" list systemproperties | grep "Default machine folder"`
+    # vb_machine_folder = line.split('folder:')[1].strip()
+    # second_disk = File.join(vb_machine_folder, vb.name, 'disk2.vdi')
+    #
+    # # Create and attach disk
+    second_disk = ".vagrant/machines/" + NAME + "/virtualbox/disk2.vdi"
+
+    unless File.exist?(second_disk)
+      vb.customize ['createhd', '--filename', second_disk, '--format', 'VDI', '--size', 10 * 1024]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', second_disk]
+  end
+
+  config.vm.synced_folder "applications", "/data/", id: "vagrant-root",
+                                     owner: "vagrant",
+                                     group: "vagrant",
+                                     mount_option: ["dmode=777,fmode=777"]
+
+  config.vm.synced_folder "../../", "/repo/", id: "vagrant-repo",
+                          owner: "vagrant",
+                          group: "vagrant",
+                          mount_option: ["dmode=777,fmode=777"]
+						  
+  # docker machine
+  #config.vm.define "dockerhost", autostart:false do |dockerhost|
+  config.vm.define "dockerhost" do |dockerhost|
+    dockerhost.vm.box = BOX_IMAGE
+	dockerhost.vm.box_version = BOX_VERSION
+    dockerhost.vm.network :private_network, ip:"192.168.100.99"
+    dockerhost.vm.network :forwarded_port, guest: 22, host: 22199, id: 'ssh'
+    ### forwarding nexus and docker ports
+    # dockerhost.vm.network :forwarded_port, guest: 8081, host: 28081, id: 'nexus'
+    # dockerhost.vm.network :forwarded_port, guest: 8082, host: 28082, id: 'nexus_docker'
+    dockerhost.vm.hostname = 'dockerhost.local'
+    dockerhost.vm.provision "shell", path: "scripts/initial_setup.sh"
+  end
+end
