@@ -7,8 +7,16 @@ yum -y install vim git
 #swapoff $(cat /etc/fstab | grep swap | cut -d ' ' -f1)
 #sed -e '/swap/ s/^#*/#/' -i /etc/fstab
 
+# disable selinux
 setenforce 0
 sed 's/SELINUX=enforcing/SELINUX=permissive/g' -i /etc/selinux/config
+
+# supress console warnings
+cat <<EOF > /etc/environment
+LANG=en_US.utf-8
+LC_ALL=en_US.utf-8
+EOF
+
 
 ### INSTALL DOCKER ###
 #yum install -y docker
