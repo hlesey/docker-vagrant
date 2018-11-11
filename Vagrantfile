@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dockerhost.vm.network :private_network, ip:"192.168.100.99"
     dockerhost.vm.network :forwarded_port, guest: 22, host: 22199, id: 'ssh'  
     dockerhost.vm.hostname = 'dockerhost.local'
-    dockerhost.vm.provision "shell", path: "scripts/initial_setup.sh"
+    dockerhost.vm.provision "shell", path: "src/scripts/initial_setup.sh"
 
     ### forwarding nexus and docker ports
     dockerhost.vm.network :forwarded_port, guest: 8081, host: 28081, id: 'nexus'
