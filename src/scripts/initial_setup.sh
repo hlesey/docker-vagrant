@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 ### INITIAL SETUP ###
-yum -y install vim git
+yum -y install vim git net-tools telnet yum-utils psmisc lsof
 
 # remove swap
 #swapoff $(cat /etc/fstab | grep swap | cut -d ' ' -f1)

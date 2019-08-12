@@ -4,7 +4,7 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 BOX_IMAGE="centos/7"
-BOX_VERSION="v1905.1"
+BOX_VERSION="1905.1"
 # BOX_IMAGE="hlesey/docker-base"
 NAME="dockerhost"
 
@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', second_disk]
   end
 
-  config.vm.synced_folder "../../", "/repo/", id: "vagrant-repo",
+  config.vm.synced_folder "../../../../", "/repo/", id: "vagrant-repo",
                           owner: "vagrant",
                           group: "vagrant",
                           mount_option: ["dmode=777,fmode=777"]
