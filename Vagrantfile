@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 0, '--device', 1, '--type', 'hdd', '--medium', second_disk]
   end
 
-  config.vm.synced_folder "../../../../", "/repo/", id: "vagrant-repo",
+  config.vm.synced_folder "../", "/repo/", id: "vagrant-repo",
                           owner: "vagrant",
                           group: "vagrant",
                           mount_option: ["dmode=777,fmode=777"]
