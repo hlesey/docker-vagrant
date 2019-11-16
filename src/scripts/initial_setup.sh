@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
 
 ### INITIAL SETUP ###
-yum -y install vim git net-tools telnet yum-utils psmisc lsof
+apt-get update && apt-get install -y vim git net-tools telnet psmisc lsof
 
 # remove swap
 #swapoff $(cat /etc/fstab | grep swap | cut -d ' ' -f1)
 #sed -e '/swap/ s/^#*/#/' -i /etc/fstab
-
-# disable selinux
-setenforce 0
-sed 's/SELINUX=enforcing/SELINUX=permissive/g' -i /etc/selinux/config
 
 # supress console warnings
 cat <<EOF > /etc/environment
@@ -19,6 +15,6 @@ EOF
 
 
 ### INSTALL DOCKER ###
-#yum install -y docker
+#apt-get install -y docker-ce
 
 #systemctl enable docker && systemctl start docker
