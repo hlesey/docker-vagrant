@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-yum -y update 
-yum -y install vim net-tools telnet yum-utils psmisc lsof
+apt-get update && apt-get install -y vim net-tools telnet psmisc lsof
