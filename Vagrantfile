@@ -4,8 +4,7 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 BOX_IMAGE="ubuntu/bionic64"
-BOX_VERSION="20191115.0.0"
-# BOX_IMAGE="hlesey/docker-base"
+BOX_VERSION="20200130.1.0"
 NAME="dockerhost"
 
 required_plugins = %w(vagrant-vbguest vagrant-share)
