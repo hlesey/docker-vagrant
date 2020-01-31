@@ -3,6 +3,9 @@
 /*.iml
 .idea/
 *.DS_Store
+
 .vagrant/*
+
 src/template/.vagrant/*
 src/template/output/*.box
+*.log

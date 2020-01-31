@@ -13,8 +13,8 @@ LANG=en_US.utf-8
 LC_ALL=en_US.utf-8
 EOF
 
-
-### INSTALL DOCKER ###
-#apt-get install -y docker-ce
-
-#systemctl enable docker && systemctl start docker
+# configure external DNS, instead of using VBox DNS
+# systemd-resolve --status
+echo "DNS=8.8.8.8" >> /etc/systemd/resolved.conf
+echo "DNS=8.8.4.4" >> /etc/systemd/resolved.conf
+systemctl restart systemd-resolved
