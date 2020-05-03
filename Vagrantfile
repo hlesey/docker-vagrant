@@ -7,7 +7,7 @@ BOX_IMAGE="ubuntu/bionic64"
 BOX_VERSION="20200429.0.0"
 NAME="dockerhost"
 
-required_plugins = %w(vagrant-vbguest vagrant-share)
+required_plugins = %w(vagrant-vbguest)
 
 required_plugins.each do |plugin|
   system "vagrant plugin install #{plugin}" unless Vagrant.has_plugin? plugin
