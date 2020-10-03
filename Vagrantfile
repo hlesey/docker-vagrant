@@ -16,7 +16,14 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on"]
+    vb.customize [
+      "modifyvm", :id,
+      "--memory", "4096",
+      "--cpus", "4",
+      "--ioapic", "on",
+      # https://forums.virtualbox.org/viewtopic.php?f=8&t=98427    
+      "--uartmode1", "file", File.join(Dir.pwd, "console.log")
+    ]
     vb.name = NAME
   end
 
