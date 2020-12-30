@@ -16,7 +16,13 @@ end
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--memory", "4096", "--cpus", "4", "--ioapic", "on"]
+    vb.customize [
+      "modifyvm", :id,
+      "--memory", "4096",
+      "--cpus", "4",
+      "--ioapic", "on",
+      "--uartmode1", "file", File.join(Dir.pwd, "dockerhost-console.log")
+    ]
     vb.name = NAME
   end
 
@@ -29,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "dockerhost" do |dockerhost|
     dockerhost.vm.box = BOX_IMAGE
     dockerhost.vm.box_version = BOX_VERSION
-    dockerhost.vm.network :private_network, ip:"192.168.100.99"
+    dockerhost.vm.network :private_network, ip:"192.168.234.99"
     dockerhost.vm.network :forwarded_port, guest: 22, host: 22199, id: 'ssh'  
     dockerhost.vm.hostname = 'dockerhost.local'
     dockerhost.vm.provision "shell", path: "src/scripts/initial_setup.sh"
@@ -37,5 +43,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ### forwarding nexus and docker ports
     dockerhost.vm.network :forwarded_port, guest: 8081, host: 28081, id: 'nexus'
     dockerhost.vm.network :forwarded_port, guest: 8082, host: 28082, id: 'nexus_docker'
+    dockerhost.vm.network :forwarded_port, guest: 8080, host: 8080, id: 'http'
   end
 end
