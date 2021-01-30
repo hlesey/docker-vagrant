@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
+set -xe
 
-### INITIAL SETUP ###
-apt-get update && apt-get install -y vim git net-tools telnet psmisc lsof
-
-# remove swap
-#swapoff $(cat /etc/fstab | grep swap | cut -d ' ' -f1)
-#sed -e '/swap/ s/^#*/#/' -i /etc/fstab
+# install basic tools
+apt-get update 
+apt-get install -y vim git net-tools telnet psmisc lsof
 
 # supress console warnings
 cat <<EOF > /etc/environment

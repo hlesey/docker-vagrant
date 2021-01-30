@@ -4,7 +4,7 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 BOX_IMAGE="ubuntu/bionic64"
-BOX_VERSION="20200429.0.0"
+BOX_VERSION="20210125.0.0"
 NAME="dockerhost"
 
 required_plugins = %w(vagrant-vbguest)
@@ -40,9 +40,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dockerhost.vm.hostname = 'dockerhost.local'
     dockerhost.vm.provision "shell", path: "src/scripts/initial_setup.sh"
 
-    ### forwarding nexus and docker ports
-    dockerhost.vm.network :forwarded_port, guest: 8081, host: 28081, id: 'nexus'
-    dockerhost.vm.network :forwarded_port, guest: 8082, host: 28082, id: 'nexus_docker'
-    dockerhost.vm.network :forwarded_port, guest: 8080, host: 8080, id: 'http'
+    ### forwarding ports
+    dockerhost.vm.network :forwarded_port, guest: 8081, host: 8081, id: 'tcp_8080'
+    dockerhost.vm.network :forwarded_port, guest: 8080, host: 8080, id: 'tcp_8080'
   end
 end
